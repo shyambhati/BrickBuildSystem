@@ -4,14 +4,18 @@ import {
   Text,
   View,
 } from 'react-native';
+import SplashScreen from './src/features/screens/SplashScreen';
+import Login from './src/features/screens/login/Login';
 
 const App = () => {
+  
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        >"Heloo"
-      </Text> 
-    </View>
+    // <View >
+    //   <Text>"Heloo"</Text> 
+    // </View>
+    //<Login/>
+    <SplashScreen/>
+    
   );
 };
 
