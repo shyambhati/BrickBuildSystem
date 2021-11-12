@@ -37,25 +37,26 @@ const Login = ({navigation}) => {
   };
 
   function loginHandler() {
-    if (username.length == 0 || password.length == 0) {
-      setmessage('Username or Password field cannot be empty!');
-      setTittle('Wrong input');
-      showAlert();
-    } else {
-      if (username == 'demo1234@gmail.com' && password == 'demo@123') {
-        saveLoginFlag('loginFlag', 'TRUE');
-        saveLoginUser('user', obj);
-        navigation.navigate('HomeTabs');
-      } else {
-        setmessage('Wrong Username or Password !');
-        setTittle('Wrong input');
-        showAlert();
-        saveLoginFlag('loginFlag', 'FALSE');
-      }
-    }
+    navigation.navigate('Dashboard');
+    // if (username.length == 0 || password.length == 0) {
+    //   setmessage('Username or Password field cannot be empty!');
+    //   setTittle('Wrong input');
+    //   showAlert();
+    // } else {
+    //   if (username == 'demo1234@gmail.com' && password == 'demo@123') {
+    //     saveLoginFlag('loginFlag', 'TRUE');
+    //     saveLoginUser('user', obj);
+        
+    //   } else {
+    //     setmessage('Wrong Username or Password !');
+    //     setTittle('Wrong input');
+    //     showAlert();
+    //     saveLoginFlag('loginFlag', 'FALSE');
+    //   }
+    // }
 
-    getAllData();
-    displayData();
+    // getAllData();
+    // displayData();
   }
 
   function showPassword() {

@@ -23,7 +23,7 @@ const SplashScreen = ({navigation}) => {
       if (loginFlag === 'TRUE') {
         //navigation.navigate('HomeTabs');
       } else {
-       // navigation.navigate('RegisterStep1');
+        navigation.navigate('Login');
       }
     } catch (error) {
       alert(error);
@@ -38,7 +38,7 @@ const SplashScreen = ({navigation}) => {
           {progressView && (
             <ProgressBar
               progress={100}
-              height={10}
+              height={5}
               backgroundColor="#EE3D4A"
               trackColor="#F1F1F2"
             />
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor: "#FFFFFF",
   },
   logo: {
     flexGrow: 1,

@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#fff',
-    padding: 8,
+    //padding: 8,
     // paddingTop: StatusBar.currentHeight,
   },
 });
