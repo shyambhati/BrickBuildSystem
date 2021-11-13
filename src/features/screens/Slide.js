@@ -5,7 +5,7 @@ const {width} = Dimensions.get('window');
 
 const styles = {
   container: {
-    height: 190,
+    height: 160,
  
   },
 

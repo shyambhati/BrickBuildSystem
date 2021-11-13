@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableHighlight,
+  FlatList,
+} from 'react-native';
 
 import CustomSafeAreaView from '../../core/components/CustomSafeArea';
 import LogoViewLG from '../../core/components/LogoViewLG';
@@ -18,13 +25,122 @@ const Dashboard = ({navigation}) => {
   function search() {
     navigation.navigate('Search');
   }
-  function openPremium(val) {
-    navigation.navigate(val + '');
+  function openCompletedJobs() {
+    navigation.navigate('CompleteJobs');
   }
 
   function loginHandler() {
-  console.log("Hello");
+    console.log('Hello');
   }
+
+  const DATA = [
+    {
+      id: 'bd7acbea-c1b1-46c2-rwer-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-sfdf-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-dhhg-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+    {
+      id: 'bd7acbea-c1bw1-46c2-dhhg-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+  ];
+
+  const renderItem = ({item}) => (
+    // <Item title={item.title} />
+    <Card style={styles.cardStyle2}>
+      <View style={{backgroundColor: '#CCCCCC', borderRadius: 10}}>
+        <View style={styles.mainViewStyle}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontWeight: 'bold'}}>Job Number : </Text>
+            <Text>{item.jobNumber}</Text>
+          </View>
+          <CustomButton
+            borderRadius={5}
+            text="Report"
+            onPress={loginHandler}
+            style={{height: 30, padding: 2, width: 60}}
+            txtStyle={{fontSize: 10, padding: 5}}
+          />
+        </View>
+        <View style={styles.viewStyle}>
+          <View>
+            <View style={{marginTop: 5}}>
+              <Text style={{fontWeight: 'bold'}}>Date Order </Text>
+              <Text>{item.dateOrder}</Text>
+            </View>
+            <View style={{marginTop: 5}}>
+              <Text style={{fontWeight: 'bold'}}>Job Open Date</Text>
+              <Text>{item.jobOpenDate}</Text>
+            </View>
+          </View>
+          <View>
+            <View style={{marginTop: 5}}>
+              <Text style={{fontWeight: 'bold'}}>Approved </Text>
+              <Text>{item.approved}</Text>
+            </View>
+            <View style={{marginTop: 5}}>
+              <Text style={{fontWeight: 'bold'}}>Address</Text>
+              <Text>{item.address}</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.viewStyle2}>
+          <View style={{alignItems: 'center'}}>
+            <Icon name={'file-alt'} size={18} color="#111" />
+            <Text style={{textAlign: 'center', fontSize: 12}}>
+              Job Order {'\n'} Details
+            </Text>
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <Icon name={'edit'} size={18} color="grey" />
+            <Text style={{textAlign: 'center', fontSize: 12}}>
+              Create site{'\n'} report
+            </Text>
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <Icon name={'edit'} size={18} color="red" />
+            <Text style={{textAlign: 'center', fontSize: 12}}>
+              Raised an{'\n'} issue
+            </Text>
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <Icon name={'tasks'} size={18} color="green" />
+            <Text style={{textAlign: 'center', fontSize: 12}}>
+              Mark as{'\n'} complete
+            </Text>
+          </View>
+        </View>
+      </View>
+    </Card>
+  );
+
   return (
     <CustomSafeAreaView>
       <View style={styles.header}>
@@ -38,14 +154,14 @@ const Dashboard = ({navigation}) => {
       </View>
 
       <View style={{flex: 1, flexDirection: 'column'}}>
-        <View style={{height: 190, marginBottom: 30}}>
+        <View style={{height: 160, marginBottom: 20}}>
           <Slide />
         </View>
         <Card
           style={{
             elevation: 4,
             borderRadius: 10,
-            margin: 10,
+            margin: 5,
             padding: 2,
             // backgroundColor: '#768192',
           }}>
@@ -58,7 +174,7 @@ const Dashboard = ({navigation}) => {
               }}>
               <TouchableHighlight
                 onPress={() => {
-                  console.log('Hello');
+                  openCompletedJobs();
                 }}
                 underlayColor="rgba(0, 0, 0, .32)"
                 style={{width: '50%', borderTopLeftRadius: 10}}>
@@ -198,15 +314,34 @@ const Dashboard = ({navigation}) => {
             </View>
           </View>
         </Card>
-        <View style={{margin: 10,}}>
+        <View style={{margin: 10}}>
           <CustomButton
             borderRadius={25}
             text="Create New Job Order"
             onPress={loginHandler}
           />
         </View>
+       
+        <View
+          style={{
+            backgroundColor: '#F0F0F0',
+            paddingBottom: 10,
+            flex: 1,
+          }}>
+          <View style={{backgroundColor: 'grey', padding: 5}}>
+            <Text style={{color: '#fff'}}>
+              Latest In-Progress Jobs of This Month
+            </Text>
+          </View>
+          <FlatList
+          horizontal
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+        </View>
 
-        <LogoViewLG />
+        {/* <LogoViewLG /> */}
       </View>
     </CustomSafeAreaView>
   );
@@ -223,7 +358,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#F6F6F6',
-    height: 70,
+    height: 58,
   },
   head: {
     // backgroundColor: '#111111',
@@ -253,29 +388,38 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'grey',
   },
-  bottomBanner: {
-    padding: 20,
-  },
-  imageStyle: {
-    width: '100%',
-    height: 90,
-    backgroundColor: '#fff',
-    resizeMode: 'cover',
+  cardStyle2: {
+    elevation: 4,
     borderRadius: 10,
+    margin: 5,
+    padding: 2,
+    width:320,
+    height:201
   },
-  slideView: {
+  mainViewStyle: {
     flexDirection: 'row',
-    elevation: 2,
-    borderRadius: 10,
-    backgroundColor: '#EBEBEB',
-    padding: 10,
+    backgroundColor: '#CCCCCC',
+    padding: 5,
+    justifyContent: 'space-between',
     alignItems: 'center',
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
-  slideSecondView: {
-    justifyContent: 'center',
-    borderLeftColor: '#D1D1D1',
-    borderLeftWidth: 2,
-    paddingLeft: 8,
-    marginLeft: 5,
+  viewStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 5,
+    backgroundColor: '#fff',
+    marginLeft: 2,
+    marginRight: 2,
+    borderRadius: 10,
+  },
+  viewStyle2: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#CCCCCC',
+    padding: 4,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
   },
 });

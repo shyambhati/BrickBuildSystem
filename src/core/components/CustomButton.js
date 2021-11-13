@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableHighlight} from 'react-native';
 import {COLORS} from '../styles/colors';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 const CustomButton = ({text, txtStyle, style, onPress, borderRadius}) => {
   return (
     <TouchableHighlight
@@ -10,8 +10,14 @@ const CustomButton = ({text, txtStyle, style, onPress, borderRadius}) => {
       style={{borderRadius: borderRadius, padding: 2}}
       onPress={onPress}>
       <View
-        style={[styles.btnContainerStyle, style, {borderRadius: borderRadius}]}>
+        style={[styles.btnContainerStyle, style, {borderRadius: borderRadius,flexDirection:"row"}]}>
         <Text style={[styles.btnTextStyle, txtStyle]}>{text}</Text>
+        {/* <Icon
+              name={'eye'}
+              size={10}
+              color="grey"
+              style={{ }}
+            /> */}
       </View>
     </TouchableHighlight>
   );

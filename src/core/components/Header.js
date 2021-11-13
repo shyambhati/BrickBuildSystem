@@ -42,70 +42,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     // paddingTop: StatusBar.currentHeight,
   },
-  header: {
-    backgroundColor: '#F6F6F6',
-    height: 172,
-  },
+
   head: {
      backgroundColor:"#ffffff",
-    height: 72,
+    height: 58,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     elevation:5,
   },
-  profile: {
-    paddingLeft: 22,
-    paddingRight: 22,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  profileRight: {},
-  profileName: {
-    color: '#EE3D4A',
-    fontSize: 38,
-    textAlign: 'right',
-    fontWeight: 'bold',
-  },
-  cardDesign: {
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    height: 80,
-    padding: 10,
-    elevation: 5,
-  },
-  cardTxt1: {
-    color: '#111111',
-    fontWeight: 'bold',
-  },
-  cardTxt2: {
-    color: '#242424',
-    fontWeight: 'bold',
-  },
-  activeInsurance: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activeInsuranceDesign: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  activeInsuranceText: {fontSize: 10, marginRight: -10},
-  mapView_design: {
-    height: 300,
-    backgroundColor: 'red',
-  },
-  bottomBanner: {
-    padding: 20,
-  },
-  imageStyle: {
-    width: '100%',
-    height: 90,
-    backgroundColor: '#fff',
-    resizeMode: 'cover',
-    borderRadius: 10,
-  },
+
 });
