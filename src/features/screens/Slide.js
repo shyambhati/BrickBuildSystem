@@ -6,6 +6,7 @@ const {width} = Dimensions.get('window');
 const styles = {
   container: {
     height: 190,
+ 
   },
 
   wrapper: {},
@@ -42,7 +43,7 @@ const Slide = () => {
               borderRadius: 4,
               marginLeft: 3,
               marginRight: 3,
-              marginTop: 3,
+              marginTop: 2,
               marginBottom: 11,
             }}
           />

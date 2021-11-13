@@ -6,7 +6,7 @@ const CustomButton = ({text, txtStyle, style, onPress, borderRadius}) => {
   return (
     <TouchableHighlight
       activeOpacity={0.8}
-      underlayColor="#DDDDDD"
+      underlayColor="white"
       style={{borderRadius: borderRadius, padding: 2}}
       onPress={onPress}>
       <View
