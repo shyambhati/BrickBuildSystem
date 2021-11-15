@@ -131,7 +131,7 @@ const CompleteJobs = ({navigation}) => {
 
   return (
     <CustomSafeAreaView>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Header
           iconRight="magnify"
           iconLeft="menu"
@@ -139,7 +139,7 @@ const CompleteJobs = ({navigation}) => {
           onPressLeft={notification}
           bgColor="#ffffff"
         />
-      </View>
+      </View> */}
       <FlatList
         data={DATA}
         renderItem={renderItem}

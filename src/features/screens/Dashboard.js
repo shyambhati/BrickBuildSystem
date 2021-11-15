@@ -3,17 +3,14 @@ import {
   Text,
   View,
   StyleSheet,
-  Image,
   TouchableHighlight,
   FlatList,
 } from 'react-native';
 
 import CustomSafeAreaView from '../../core/components/CustomSafeArea';
-import LogoViewLG from '../../core/components/LogoViewLG';
 import Header from '../../core/components/Header';
 import Slide from './Slide';
-import ImageView from '../../core/components/ImageView';
-import {Card, Divider, TouchableRipple} from 'react-native-paper';
+import {Card, } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CustomButton from '../../core/components/CustomButton';
 const Dashboard = ({navigation}) => {
@@ -148,8 +145,9 @@ const Dashboard = ({navigation}) => {
           iconRight="magnify"
           iconLeft="menu"
           onPressRight={search}
-          onPressLeft={notification}
+          onPressLeft={ ()=>navigation.openDrawer('SideMenu')}
           bgColor="#ffffff"
+
         />
       </View>
 

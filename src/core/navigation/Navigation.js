@@ -6,6 +6,7 @@ import SplashScreen from '../../features/screens/SplashScreen';
 import Login from '../../features/screens/login/Login';
 import Dashboard from '../../features/screens/Dashboard';
 import CompleteJobs from '../../features/screens/CompleteJobs';
+import HomeDrawer from './HomeDrawer';
 
 const Stack = createStackNavigator();
 
@@ -45,16 +46,25 @@ export default Navigation = () => {
         options={{headerShown: false}}
       />
 
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Dashboard"
         component={Dashboard}
         options={{headerShown: false, headerTitle: 'Dashboard'}}
-      />
+      /> */}
 
+      <Stack.Screen
+        name="Dashboard"
+        component={HomeDrawer}
+        options={{headerShown: false, headerTitle: 'Dashboard'}}
+      />
       <Stack.Screen
         name="CompleteJobs"
         component={CompleteJobs}
-        options={{headerShown: false, headerTitle: 'Complete Jobs'}}
+        options={{
+          headerShown: true,
+          headerTitle: 'Complete Jobs',
+          gestureEnabled: true,
+        }}
       />
     </Stack.Navigator>
   );

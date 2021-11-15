@@ -1,33 +1,23 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, StatusBar, TextInput} from 'react-native';
-import {TouchableRipple} from 'react-native-paper';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import CustomButton from '../../../core/components/CustomButton'
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import CustomButton from '../../../core/components/CustomButton';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import LogoView from '../../../core/components/LogoView';
 import CustomSafeAreaView from '../../../core/components/CustomSafeArea';
 import LogoViewLG from '../../../core/components/LogoViewLG';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Loader from '../../../core/components/Loader';
+import axios from 'axios';
 const Login = ({navigation}) => {
-  
-
   const globalStyle = require('../../../core/styles/GlobalStyle');
-
-  const [hidePassword, setHidePassword] = React.useState(true);
-  const [message, setmessage] = React.useState('');
-  const [tittle, setTittle] = React.useState('');
-
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
-  const [visibleAlert, setShowAlert] = React.useState(false);
-
+  const [hidePassword, setHidePassword] = useState(true);
+  const [message, setmessage] = useState('');
+  const [tittle, setTittle] = useState('');
+  const [username, setUsername] = useState('C006');
+  const [password, setPassword] = useState('c006');
+  const [visibleAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
   showAlert = () => {
     setShowAlert(true);
   };
@@ -37,28 +27,60 @@ const Login = ({navigation}) => {
   };
 
   function loginHandler() {
-    navigation.navigate('Dashboard');
-    // if (username.length == 0 || password.length == 0) {
-    //   setmessage('Username or Password field cannot be empty!');
-    //   setTittle('Wrong input');
-    //   showAlert();
-    // } else {
-    //   if (username == 'demo1234@gmail.com' && password == 'demo@123') {
-    //     saveLoginFlag('loginFlag', 'TRUE');
-    //     saveLoginUser('user', obj);
-        
-    //   } else {
-    //     setmessage('Wrong Username or Password !');
-    //     setTittle('Wrong input');
-    //     showAlert();
-    //     saveLoginFlag('loginFlag', 'FALSE');
-    //   }
-    // }
+    // navigation.navigate('Dashboard');
 
-    // getAllData();
-    // displayData();
+    if (username.length == 0 || password.length == 0) {
+      setmessage('Username or Password field cannot be empty!');
+      setTittle('Wrong input');
+      showAlert();
+    } else { login();}
   }
 
+  async function login() {
+
+    var flag=true;
+    setLoading(flag);
+    const userData = {
+      username: username,
+      password: password,
+      device_id: 'aec356161c77de3e',
+      version_code: '1',
+      fcm_token: 'hfhdgfuDG56565DSADIWHD5DFDSIFSN4DWODAI4DJI',
+      login_from: 'Android',
+    };
+
+    axios({
+      method: 'post',
+      url: 'http://portal.brickbuildsystem.co.nz/api/login',
+      data: userData,
+    })
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data.error_code === 200) {
+          saveLoginFlag(
+            'loginFlag',
+            response.data.data[0].logged_in === 'TRUE' ? 'true' : 'FALSE',
+          );
+          saveLoginUser('user', response.data.data[0]);
+          navigation.navigate('Dashboard');
+        } else {
+          flag=false;
+          saveLoginFlag('loginFlag', 'FALSE');
+          setmessage('Wrong Username or Password !');
+          setTittle('Wrong input');
+          showAlert();
+          saveLoginFlag('loginFlag', 'FALSE');
+        }
+      })
+      .catch(function (error) {
+        flag=false;
+        setmessage('Something went wrong');
+        setTittle('Wrong input');
+        showAlert();
+        console.log('axois error : ' + error);
+      });
+      setLoading(flag);
+  }
   function showPassword() {
     setHidePass(!hidePass);
     setHidePassword(!hidePassword);
@@ -66,12 +88,6 @@ const Login = ({navigation}) => {
 
   const openForgetPassword = () => {
     //navigation.navigate('ForgetPassword');
-  };
-
-  let obj = {
-    name: 'Michal',
-    email: 'michal@gmail.com',
-    city: 'New York',
   };
 
   const saveLoginFlag = async (key, value) => {
@@ -117,6 +133,7 @@ const Login = ({navigation}) => {
   const [hidePass, setHidePass] = React.useState(false);
   return (
     <CustomSafeAreaView>
+      <Loader loading={loading} />
       <AwesomeAlert
         show={visibleAlert}
         showProgress={false}
@@ -166,7 +183,6 @@ const Login = ({navigation}) => {
               onChangeText={password => setPassword(password)}
               placeholder="Enter Password.."
               defaultValue=""
-              
               style={[
                 globalStyle.textInputRounded,
                 {flex: 1, paddingRight: 45},
@@ -191,7 +207,6 @@ const Login = ({navigation}) => {
 
           <CustomButton borderRadius={25} text="Login" onPress={loginHandler} />
           <Text style={globalStyle.subHeading2}>
-         
             2020 ALL Rights Reserved. View Brick Build System Privacy and Terms
           </Text>
         </View>
@@ -209,12 +224,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 8,
     paddingTop: StatusBar.currentHeight,
-  },
-  heading: {
-    fontSize: hp('4%'),
-    fontWeight: 'bold',
-    color: '#242424',
-    textAlign: 'center',
   },
 
   text1: {

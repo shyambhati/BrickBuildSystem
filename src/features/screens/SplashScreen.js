@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   progress: {
-    marginTop: 10,
+    marginTop: 5,
     borderRadius: 0,
   },
 });
