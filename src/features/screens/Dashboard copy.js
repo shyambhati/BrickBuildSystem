@@ -35,8 +35,6 @@ const Dashboard = ({ navigation }) => {
 
   const [pendingJobOrder, setPendingJobOrder] = useState(null);
 
-  const [userID, setUserId] = useState(0);
-
   function notification() {
     navigation.navigate('Notification');
   }
@@ -48,25 +46,8 @@ const Dashboard = ({ navigation }) => {
     navigation.navigate('CompleteJobs');
   }
 
-  function openPendingJobs() {
-    navigation.navigate('PendingJobs');
-  }
-
   function loginHandler() {
     console.log('Hello');
-  }
-
-  function openOrderDetails(item) {
- 
-    navigation.navigate('OrderDetails', { "item": item });
-
-  }
-
-
-
-  const openSiteReport = (jobId, job_no) => {
-
-    navigation.navigate('SiteReport', { "useId": userID, "jobId": jobId, "jobNo": job_no });
   }
 
   useEffect(() => {
@@ -80,7 +61,7 @@ const Dashboard = ({ navigation }) => {
       console.log("Run else");
       getJobsCount();
     }
-  }, [requestData, requestDataJobCount, pendingJobOrder]);
+  }, [requestData, requestDataJobCount]);
 
   async function displayData() {
     try {
@@ -95,10 +76,10 @@ const Dashboard = ({ navigation }) => {
     let user_id = "";
     try {
       user_id = await AsyncStorage.getItem('user_id');
-      setUserId(user_id);
     } catch (error) {
       alert(error);
     }
+
     axios({
       method: 'post',
       url: 'http://portal.brickbuildsystem.co.nz/api/loadjobordercount',
@@ -106,7 +87,7 @@ const Dashboard = ({ navigation }) => {
     }).then(function (response) {
       setRequestDataJobCount(response.data.data[0]);
       setRequestDataJobCount(response.data.data[0]);
-
+     
       getJobOrder("inprogress");
       if (response.data.error_code === 200) {
         // console.log("User Profile is : "+);
@@ -121,7 +102,7 @@ const Dashboard = ({ navigation }) => {
 
 
   async function getJobOrder(type) {
-    // {"user_id":33,"req_for":"inprogress"} or "completed"
+   // {"user_id":33,"req_for":"inprogress"} or "completed"
     let user_id = "";
     try {
       user_id = await AsyncStorage.getItem('user_id');
@@ -134,9 +115,10 @@ const Dashboard = ({ navigation }) => {
       url: 'http://portal.brickbuildsystem.co.nz/api/joborders',
       data: { "user_id": user_id, "req_for": type },
     }).then(function (response) {
-      setPendingJobOrder(response.data.data[0].job_orders);
+      setPendingJobOrder(response.data.data[0]);
+      setPendingJobOrder(response.data.data[0]);
       setLoading(false);
-      // console.log(response.data.data[0].job_orders);
+      console.log(response.data.data[0]);
       if (response.data.error_code === 200) {
         // console.log("User Profile is : "+);
       }
@@ -148,10 +130,44 @@ const Dashboard = ({ navigation }) => {
 
   }
 
-
-
-
-
+  const DATA = [
+    {
+      id: 'bd7acbea-c1b1-46c2-rwer-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-sfdf-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-dhhg-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+    {
+      id: 'bd7acbea-c1bw1-46c2-dhhg-3ad53abb28ba',
+      jobNumber: '424234234',
+      dateOrder: '29 Oct 2021',
+      jobOpenDate: '29 Oct 2021',
+      approved: 'Yes',
+      status: 'Complete',
+      address: 'Noida',
+    },
+  ];
 
 
   const renderItem = ({ item }) => (
@@ -160,65 +176,46 @@ const Dashboard = ({ navigation }) => {
       <View style={{ backgroundColor: '#CCCCCC', borderRadius: 10 }}>
         <View style={styles.mainViewStyle}>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: 'bold' }}>Job No: </Text>
-            <Text>{item.job_no}</Text>
+            <Text style={{ fontWeight: 'bold' }}>Job Number : </Text>
+            <Text>{item.jobNumber}</Text>
           </View>
-          {item.site_report_added == 1 ? <CustomButton
-            borderRadius={5}
-            text="Report"
-            style={{ height: 30, padding: 2, width: 60 }}
-            txtStyle={{ fontSize: 10, padding: 5 }}
-            onPress={() =>
-              openSiteReport(item.id, item.job_no)
-            }
-          /> :  
           <CustomButton
             borderRadius={5}
-            text="Create Site Report"
-            //onPress={loginHandler}
-            style={{ height: 30, padding: 2, width: 110 ,backgroundColor:"grey"}}
-            txtStyle={{ fontSize: 10, padding: 5 ,fontWeight:"bold"}}
-            onPress={() => console.log()
-              //openSiteReport(item.id, item.job_no)
-            }
-          />}
-
+            text="Report"
+            onPress={loginHandler}
+            style={{ height: 30, padding: 2, width: 60 }}
+            txtStyle={{ fontSize: 10, padding: 5 }}
+          />
         </View>
-        <View style={styles.viewStyle} >
-          <View style={{ flex: 0.6 }}>
-            <View style={{ marginTop: 5, flex: 0.5 }}>
+        <View style={styles.viewStyle}>
+          <View>
+            <View style={{ marginTop: 5 }}>
               <Text style={{ fontWeight: 'bold' }}>Date Order </Text>
-              <Text>{item.date_created.split(" ")[0]}</Text>
+              <Text>{item.dateOrder}</Text>
             </View>
-            <View style={{ marginTop: 5, flex: 0.5 }}>
+            <View style={{ marginTop: 5 }}>
               <Text style={{ fontWeight: 'bold' }}>Job Open Date</Text>
-              <Text>{item.job_open_date.split(" ")[0]}</Text>
+              <Text>{item.jobOpenDate}</Text>
             </View>
           </View>
-          <View style={{ flex: 0.4, overflow: "hidden" }}>
-            <View style={{ marginTop: 5, }}>
+          <View>
+            <View style={{ marginTop: 5 }}>
               <Text style={{ fontWeight: 'bold' }}>Approved </Text>
-              <Text>{item.approved == 1 ? "YES" : "NO"}</Text>
+              <Text>{item.approved}</Text>
             </View>
             <View style={{ marginTop: 5 }}>
               <Text style={{ fontWeight: 'bold' }}>Address</Text>
-              <Text numberOfLines={1} ellipsizeMode='tail'>{item.address}</Text>
+              <Text>{item.address}</Text>
             </View>
           </View>
         </View>
         <View style={styles.viewStyle2}>
-          <TouchableHighlight
-          activeOpacity={0.6} underlayColor="#DDDDDD"
-            onPress={() => {openOrderDetails(item)}}>
-
-            <View style={{ alignItems: 'center' }}>
-              <Icon name={'file-alt'} size={18} color="#111" />
-              <Text style={{ textAlign: 'center', fontSize: 12 }}>
-                Job Order {'\n'} Details
-              </Text>
-            </View>
-          </TouchableHighlight>
-
+          <View style={{ alignItems: 'center' }}>
+            <Icon name={'file-alt'} size={18} color="#111" />
+            <Text style={{ textAlign: 'center', fontSize: 12 }}>
+              Job Order {'\n'} Details
+            </Text>
+          </View>
           <View style={{ alignItems: 'center' }}>
             <Icon name={'edit'} size={18} color="grey" />
             <Text style={{ textAlign: 'center', fontSize: 12 }}>
@@ -340,7 +337,7 @@ const Dashboard = ({ navigation }) => {
               <View style={styles.verticleLine}></View>
               <TouchableHighlight
                 onPress={() => {
-                  openPendingJobs();
+                  console.log('Hello');
                 }}
                 underlayColor="rgba(0, 0, 0, .32)"
                 style={{ width: '50%', borderTopRightRadius: 10 }}>
@@ -437,11 +434,9 @@ const Dashboard = ({ navigation }) => {
           </View>
           <FlatList
             horizontal
-            data={pendingJobOrder}
-            extraData={{ pendingJobOrder }}
+            data={DATA}
             renderItem={renderItem}
             keyExtractor={item => item.id}
-            ListEmptyComponent={() => (pendingJobOrder == null ? <Text>The List is empty</Text> : null)}
           />
         </View>
 

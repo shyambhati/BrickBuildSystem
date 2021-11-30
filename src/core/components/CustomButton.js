@@ -12,12 +12,7 @@ const CustomButton = ({text, txtStyle, style, onPress, borderRadius}) => {
       <View
         style={[styles.btnContainerStyle, style, {borderRadius: borderRadius,flexDirection:"row"}]}>
         <Text style={[styles.btnTextStyle, txtStyle]}>{text}</Text>
-        {/* <Icon
-              name={'eye'}
-              size={10}
-              color="grey"
-              style={{ }}
-            /> */}
+ 
       </View>
     </TouchableHighlight>
   );

@@ -25,7 +25,7 @@ const HomeDrawer = props => {
       />
       <Drawer.Screen
         name="UserProfile"
-        options={{drawerLabel: 'Home Screen'}}
+        options={{drawerLabel: 'User Profile',headerShown:false}}
         component={UserProfile}
       />
     </Drawer.Navigator>

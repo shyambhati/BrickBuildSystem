@@ -14,9 +14,9 @@ const SideMenu = (props) => {
     // const toggleTheme = () => {
     //     setcDarkTheme(!cDarkTheme);
     // }
-    const [userData,setUserData]=useState([]);
+ //   const [userData,setUserData]=useState([]);
 
-    useEffect(() => {getAllData()});
+   // useEffect(() => {getAllData()});
 
     const getAllData = () => {
         let user =  AsyncStorage.getItem('user');
@@ -68,13 +68,13 @@ const SideMenu = (props) => {
                     <DrawerItem 
                         icon = { ()=> ( <Icon name="home-outline" style={{fontSize:2.8*vh,color:'grey'}} />  ) } 
                         label="Home"
-                        // onPress={ ()=>{props.navigation.navigate('Home')} }
+                        onPress={ ()=>{props.navigation.navigate('Dashboard')} }
                     />
 
                     <DrawerItem 
                         icon = { ()=> ( <Icon name="account-outline" style={{fontSize:2.8*vh,color:'grey'}} />  ) } 
                         label="Profile"
-                       // onPress={ ()=>{props.navigation.navigate('Profile')} }
+                      onPress={ ()=>{console.log("Work.."),props.navigation.navigate('UserProfile')} }
                     />
                    
                 </Drawer.Section>

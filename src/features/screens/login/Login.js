@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, View, StyleSheet, StatusBar, TextInput} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, StatusBar, TextInput } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import CustomButton from '../../../core/components/CustomButton';
 
@@ -9,7 +9,7 @@ import CustomSafeAreaView from '../../../core/components/CustomSafeArea';
 import LogoViewLG from '../../../core/components/LogoViewLG';
 import Loader from '../../../core/components/Loader';
 import axios from 'axios';
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const globalStyle = require('../../../core/styles/GlobalStyle');
   const [hidePassword, setHidePassword] = useState(true);
   const [message, setmessage] = useState('');
@@ -33,13 +33,12 @@ const Login = ({navigation}) => {
       setmessage('Username or Password field cannot be empty!');
       setTittle('Wrong input');
       showAlert();
-    } else { login();}
+    } else { login(); }
   }
 
   async function login() {
 
-    var flag=true;
-    setLoading(flag);
+    setLoading(true);
     const userData = {
       username: username,
       password: password,
@@ -55,16 +54,24 @@ const Login = ({navigation}) => {
       data: userData,
     })
       .then(function (response) {
-        console.log(response.data);
+        console.log("Data => ");
+        console.log(response.data.data[0]);
         if (response.data.error_code === 200) {
+
           saveLoginFlag(
             'loginFlag',
-            response.data.data[0].logged_in === 'TRUE' ? 'true' : 'FALSE',
+            response.data.data[0].logged_in === 'true' ? 'true' : 'FALSE',
           );
-          saveLoginUser('user', response.data.data[0]);
+          saveLoginUser('user', JSON.stringify(response.data.data[0]));
+
+          saveLoginFlag(
+            'user_id',
+            response.data.data[0].user_id,
+          );
+          setLoading(false);
           navigation.navigate('Dashboard');
         } else {
-          flag=false;
+          setLoading(false);
           saveLoginFlag('loginFlag', 'FALSE');
           setmessage('Wrong Username or Password !');
           setTittle('Wrong input');
@@ -73,13 +80,13 @@ const Login = ({navigation}) => {
         }
       })
       .catch(function (error) {
-        flag=false;
+        setLoading(false);
         setmessage('Something went wrong');
         setTittle('Wrong input');
         showAlert();
         console.log('axois error : ' + error);
       });
-      setLoading(flag);
+
   }
   function showPassword() {
     setHidePass(!hidePass);
@@ -161,7 +168,7 @@ const Login = ({navigation}) => {
           <Text style={globalStyle.subHeading}>
             Enter your Username and Password to login
           </Text>
-          <View style={{marginTop: 10}}>
+          <View style={{ marginTop: 10 }}>
             <TextInput
               value={username}
               onChangeText={username => setUsername(username)}
@@ -185,7 +192,7 @@ const Login = ({navigation}) => {
               defaultValue=""
               style={[
                 globalStyle.textInputRounded,
-                {flex: 1, paddingRight: 45},
+                { flex: 1, paddingRight: 45 },
               ]}
             />
             <Icon
@@ -193,7 +200,7 @@ const Login = ({navigation}) => {
               size={16}
               color="grey"
               onPress={() => showPassword()}
-              style={{position: 'absolute', right: 15, bottom: 24}}
+              style={{ position: 'absolute', right: 15, bottom: 24 }}
             />
           </View>
 
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 40,
   },
-  logo: {height: 128, width: 208},
+  logo: { height: 128, width: 208 },
 
   SectionStyle: {
     flexDirection: 'row',

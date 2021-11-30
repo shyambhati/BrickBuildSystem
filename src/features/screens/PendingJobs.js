@@ -12,12 +12,14 @@ import CustomButton from '../../core/components/CustomButton';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import Loader from '../../core/components/Loader';
-const CompleteJobs = ({ navigation }) => {
+const PendingJobs = ({ navigation }) => {
   const globalStyle = require('../../core/styles/GlobalStyle');
 
   const [loading, setLoading] = useState(false);
+
+  const [pendingJobOrder, setPendingJobOrder] = useState(null);
   const [userID, setUserId] = useState(0);
-  const [completeJobOrder, setCompleteJobOrder] = useState(null);
+
   function notification() {
     navigation.navigate('Notification');
   }
@@ -34,11 +36,11 @@ const CompleteJobs = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if (completeJobOrder == null) {
-      getJobOrder("completed");
+    if (pendingJobOrder == null) {
+      getJobOrder("inprogress");
     }
 
-  }, [completeJobOrder]);
+  }, [pendingJobOrder]);
 
   async function getJobOrder(type) {
     setLoading(true);
@@ -56,16 +58,17 @@ const CompleteJobs = ({ navigation }) => {
       url: 'http://portal.brickbuildsystem.co.nz/api/joborders',
       data: { "user_id": user_id, "req_for": type },
     }).then(function (response) {
-      setCompleteJobOrder(response.data.data[0].job_orders);
+      setPendingJobOrder(response.data.data[0].job_orders);
       setLoading(false);
       // console.log(response.data.data[0].job_orders);
       if (response.data.error_code === 200) {
         // console.log("User Profile is : "+);
       }
-    }).catch(function (error) {
-      setLoading(false);
-      console.log('axois error : ' + error);
-    });
+    })
+      .catch(function (error) {
+        setLoading(false);
+        console.log('axois error : ' + error);
+      });
 
   }
 
@@ -77,8 +80,6 @@ const CompleteJobs = ({ navigation }) => {
     navigation.navigate('OrderDetails', { "item": item });
 
   }
-
-
   const renderItem = ({ item }) => (
     // <Item title={item.title} />
     <Card style={styles.cardStyle}>
@@ -96,17 +97,17 @@ const CompleteJobs = ({ navigation }) => {
             onPress={() =>
               openSiteReport(item.id, item.job_no)
             }
-          /> :
-            <CustomButton
-              borderRadius={5}
-              text="Create Site Report"
-              //onPress={loginHandler}
-              style={{ height: 30, padding: 2, width: 110, backgroundColor: "grey" }}
-              txtStyle={{ fontSize: 10, padding: 5, fontWeight: "bold" }}
-              onPress={() => console.log()
-                //openSiteReport(item.id, item.job_no)
-              }
-            />}
+          /> :  
+          <CustomButton
+            borderRadius={5}
+            text="Create Site Report"
+            //onPress={loginHandler}
+            style={{ height: 30, padding: 2, width: 110 ,backgroundColor:"grey"}}
+            txtStyle={{ fontSize: 10, padding: 5 ,fontWeight:"bold"}}
+            onPress={() => console.log()
+              //openSiteReport(item.id, item.job_no)
+            }
+          />}
         </View>
 
         <View style={styles.viewStyle}>
@@ -133,7 +134,7 @@ const CompleteJobs = ({ navigation }) => {
               </View>
             </View>
           </View>
-          <View style={{ marginTop: 5, flexDirection: 'row', }}>
+          <View style={{ marginTop: 5 , flexDirection: 'row',}}>
             <Text style={{ fontWeight: 'bold' }}>Address : </Text>
             <Text numberOfLines={1} ellipsizeMode='tail'>{item.address}</Text>
           </View>
@@ -141,7 +142,7 @@ const CompleteJobs = ({ navigation }) => {
         </View>
 
         <View style={styles.viewStyle2}>
-          <TouchableHighlight
+        <TouchableHighlight
             activeOpacity={0.6} underlayColor="#DDDDDD"
             onPress={() => { openOrderDetails(item) }}>
             <View style={{ alignItems: 'center' }}>
@@ -152,9 +153,21 @@ const CompleteJobs = ({ navigation }) => {
             </View>
           </TouchableHighlight>
           <View style={{ alignItems: 'center' }}>
-            <Icon name={'edit'} size={18} color="green" />
+            <Icon name={'edit'} size={18} color="grey" />
             <Text style={{ textAlign: 'center', fontSize: 12 }}>
-              Set as{'\n'} In-Progress
+              Create site{'\n'} report
+            </Text>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Icon name={'edit'} size={18} color="red" />
+            <Text style={{ textAlign: 'center', fontSize: 12 }}>
+              Raised an{'\n'} issue
+            </Text>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Icon name={'tasks'} size={18} color="green" />
+            <Text style={{ textAlign: 'center', fontSize: 12 }}>
+              Mark as{'\n'} complete
             </Text>
           </View>
         </View>
@@ -175,8 +188,8 @@ const CompleteJobs = ({ navigation }) => {
         />
       </View> */}
       <FlatList
-        data={completeJobOrder}
-        extraData={{ completeJobOrder }}
+        data={pendingJobOrder}
+        extraData={{ pendingJobOrder }}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
@@ -184,7 +197,7 @@ const CompleteJobs = ({ navigation }) => {
   );
 };
 
-export default CompleteJobs;
+export default PendingJobs;
 
 const styles = StyleSheet.create({
   container: {
@@ -219,7 +232,7 @@ const styles = StyleSheet.create({
   },
   viewStyle2: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-around',
     backgroundColor: '#CCCCCC',
     padding: 4,
     borderBottomRightRadius: 10,
