@@ -12,26 +12,17 @@ import CustomButton from '../../core/components/CustomButton';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import Loader from '../../core/components/Loader';
+import CustomAlert from '../../core/components/CustomAlert';
+import { set } from 'react-native-reanimated';
 const CompleteJobs = ({ navigation }) => {
   const globalStyle = require('../../core/styles/GlobalStyle');
 
   const [loading, setLoading] = useState(false);
   const [userID, setUserId] = useState(0);
+  const [jobID, setJobId] = useState(0);
+  const [jobNo, setJobNo] = useState(0);
   const [completeJobOrder, setCompleteJobOrder] = useState(null);
-  function notification() {
-    navigation.navigate('Notification');
-  }
 
-  function search() {
-    navigation.navigate('Search');
-  }
-  function openPremium(val) {
-    navigation.navigate(val + '');
-  }
-
-  function loginHandler() {
-    console.log('Hello');
-  }
 
   useEffect(() => {
     if (completeJobOrder == null) {
@@ -69,6 +60,35 @@ const CompleteJobs = ({ navigation }) => {
 
   }
 
+  async function changeStatus(job_id,job_no) {
+   
+    // {"user_id":33,"req_for":"inprogress"} or "completed"
+    console.log("called ");
+    let user_id = "";
+    try {
+      user_id = await AsyncStorage.getItem('user_id');
+      setUserId(user_id);
+    } catch (error) {
+      alert(error);
+    }
+    axios({
+      method: 'post',
+      url: 'http://portal.brickbuildsystem.co.nz/api/jobordercomplete',
+      data: { "user_id": user_id,"device_id":"643db42344ccb36e", "job_id":job_id,"job_no":job_no,"statusid":"1" },
+    }).then(function (response) { 
+      if (response.data.error_code === 200) {
+        hideAlert();
+        getJobOrder("completed");
+      }
+      else{
+        hideAlert();
+      }
+    }).catch(function (error) {
+      hideAlert();
+    });
+
+  }
+
   const openSiteReport = (jobId, job_no) => {
     navigation.navigate('SiteReport', { "useId": userID, "jobId": jobId, "jobNo": job_no });
   }
@@ -79,7 +99,35 @@ const CompleteJobs = ({ navigation }) => {
   }
 
 
+  const [message, setmessage] = React.useState('');
+  const [tittle, setTittle] = React.useState('');
+
+  const [visibleAlert, setShowAlert] = React.useState(false);
+
+  showAlert = () => {
+    setShowAlert(true);
+  };
+
+  hideAlert = () => {
+    setShowAlert(false);
+  };
+
+  function confirmStatusChange()
+  {
+    hideAlert();
+    changeStatus(jobID,jobNo);
+  }
+
+  function changeStatusAlert(jobid,jobno) {
+    setmessage('Want to Set status of Job number '+jobno+' to in-progress?');
+    setTittle('Are You sure ?');
+    setJobId(jobid);
+    setJobNo(jobno);
+    showAlert();
+  };
+
   const renderItem = ({ item }) => (
+   // console.log(item),
     // <Item title={item.title} />
     <Card style={styles.cardStyle}>
       <View style={{ backgroundColor: '#CCCCCC', borderRadius: 10 }}>
@@ -129,7 +177,7 @@ const CompleteJobs = ({ navigation }) => {
               </View>
               <View style={{ marginTop: 5 }}>
                 <Text style={{ fontWeight: 'bold' }}>Status</Text>
-                <Text>{item.status}</Text>
+                <Text>{item.status==1?"in progress":"Completed"}</Text>
               </View>
             </View>
           </View>
@@ -151,12 +199,16 @@ const CompleteJobs = ({ navigation }) => {
               </Text>
             </View>
           </TouchableHighlight>
-          <View style={{ alignItems: 'center' }}>
-            <Icon name={'edit'} size={18} color="green" />
-            <Text style={{ textAlign: 'center', fontSize: 12 }}>
-              Set as{'\n'} In-Progress
-            </Text>
-          </View>
+          <TouchableHighlight
+            activeOpacity={0.6} underlayColor="#DDDDDD"
+            onPress={()=>{changeStatusAlert(item.id,item.job_no) }}>
+            <View style={{ alignItems: 'center' }}>
+              <Icon name={'edit'} size={18} color="green" />
+              <Text style={{ textAlign: 'center', fontSize: 12 }}>
+                Set as{'\n'} In-Progress
+              </Text>
+            </View>
+          </TouchableHighlight>
         </View>
       </View>
     </Card>
@@ -164,16 +216,16 @@ const CompleteJobs = ({ navigation }) => {
 
   return (
     <CustomSafeAreaView>
+      <CustomAlert
+        title={tittle}
+        message={message}
+        visibleAlert={visibleAlert}
+        confirmText={'OKay!'}
+        cancelText={'No, cancel'}
+        cancelBtn={() => hideAlert()}
+        confirmBtn={() => confirmStatusChange()}
+      />
       <Loader loading={loading} />
-      {/* <View style={styles.header}>
-        <Header
-          iconRight="magnify"
-          iconLeft="menu"
-          onPressRight={search}
-          onPressLeft={notification}
-          bgColor="#ffffff"
-        />
-      </View> */}
       <FlatList
         data={completeJobOrder}
         extraData={{ completeJobOrder }}

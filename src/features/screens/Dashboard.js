@@ -16,6 +16,7 @@ import CustomButton from '../../core/components/CustomButton';
 import Loader from '../../core/components/Loader';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import CustomAlert from '../../core/components/CustomAlert';
 const Dashboard = ({ navigation }) => {
   const globalStyle = require('../../core/styles/GlobalStyle');
 
@@ -34,12 +35,8 @@ const Dashboard = ({ navigation }) => {
 
 
   const [pendingJobOrder, setPendingJobOrder] = useState(null);
-
   const [userID, setUserId] = useState(0);
 
-  function notification() {
-    navigation.navigate('Notification');
-  }
 
   function search() {
     navigation.navigate('Search');
@@ -59,6 +56,13 @@ const Dashboard = ({ navigation }) => {
   function openOrderDetails(item) {
  
     navigation.navigate('OrderDetails', { "item": item });
+
+  }
+
+  
+  function raisedAnIssue() {
+ 
+    navigation.navigate('RaisedAnIssue');
 
   }
 
@@ -153,6 +157,63 @@ const Dashboard = ({ navigation }) => {
 
 
 
+  const [jobID, setJobId] = useState(0);
+  const [jobNo, setJobNo] = useState(0);
+  const [message, setmessage] = React.useState('');
+  const [tittle, setTittle] = React.useState('');
+
+  const [visibleAlert, setShowAlert] = React.useState(false);
+
+  showAlert = () => {
+    setShowAlert(true);
+  };
+
+  hideAlert = () => {
+    setShowAlert(false);
+  };
+
+  function confirmStatusChange()
+  {
+    hideAlert();
+    changeStatus(jobID,jobNo);
+  }
+
+  function changeStatusAlert(jobid,jobno) {
+    setmessage('Want to Set status of Job number '+jobno+' to in-progress?');
+    setTittle('Are You sure ?');
+    setJobId(jobid);
+    setJobNo(jobno);
+    showAlert();
+  };
+
+  async function changeStatus(job_id,job_no) {
+   
+    // {"user_id":33,"req_for":"inprogress"} or "completed"
+    console.log("called ");
+    let user_id = "";
+    try {
+      user_id = await AsyncStorage.getItem('user_id');
+      setUserId(user_id);
+    } catch (error) {
+      alert(error);
+    }
+    axios({
+      method: 'post',
+      url: 'http://portal.brickbuildsystem.co.nz/api/jobordercomplete',
+      data: { "user_id": user_id,"device_id":"643db42344ccb36e", "job_id":job_id,"job_no":job_no,"statusid":"0" },
+    }).then(function (response) { 
+      if (response.data.error_code === 200) {
+        hideAlert();
+        getJobsCount();
+      }
+      else{
+        hideAlert();
+      }
+    }).catch(function (error) {
+      hideAlert();
+    });
+
+  }
 
   const renderItem = ({ item }) => (
     // <Item title={item.title} />
@@ -225,18 +286,28 @@ const Dashboard = ({ navigation }) => {
               Create site{'\n'} report
             </Text>
           </View>
+
+          
+          <TouchableHighlight
+            activeOpacity={0.6} underlayColor="#DDDDDD"
+            onPress={()=>{raisedAnIssue() }}>
           <View style={{ alignItems: 'center' }}>
             <Icon name={'edit'} size={18} color="red" />
             <Text style={{ textAlign: 'center', fontSize: 12 }}>
               Raised an{'\n'} issue
             </Text>
           </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            activeOpacity={0.6} underlayColor="#DDDDDD"
+            onPress={()=>{changeStatusAlert(item.id,item.job_no) }}>
           <View style={{ alignItems: 'center' }}>
             <Icon name={'tasks'} size={18} color="green" />
             <Text style={{ textAlign: 'center', fontSize: 12 }}>
               Mark as{'\n'} complete
             </Text>
           </View>
+          </TouchableHighlight>
         </View>
       </View>
     </Card>
@@ -245,6 +316,15 @@ const Dashboard = ({ navigation }) => {
   return (
     <CustomSafeAreaView>
       <Loader loading={loading} />
+      <CustomAlert
+        title={tittle}
+        message={message}
+        visibleAlert={visibleAlert}
+        confirmText={'OKay!'}
+        cancelText={'No, cancel'}
+        cancelBtn={() => hideAlert()}
+        confirmBtn={() => confirmStatusChange()}
+      />
       <View style={styles.header}>
         <Header
           iconRight="magnify"

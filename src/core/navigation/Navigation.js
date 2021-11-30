@@ -10,6 +10,7 @@ import HomeDrawer from './HomeDrawer';
 import PendingJobs from '../../features/screens/PendingJobs';
 import SiteReport from '../../features/screens/SiteReport';
 import OrderDetails from '../../features/screens/OrderDetails';
+import RaisedAnIssue from '../../features/screens/RaisedAnIssue';
 
 const Stack = createStackNavigator();
 
@@ -101,6 +102,16 @@ export default Navigation = () => {
         }}
       />
 
+
+      <Stack.Screen
+        name="RaisedAnIssue"
+        component={RaisedAnIssue}
+        options={{
+          headerShown: true,
+          headerTitle: 'Raised an issue',
+          gestureEnabled: true,
+        }}
+      />
 
     </Stack.Navigator>
   );

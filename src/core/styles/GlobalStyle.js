@@ -31,6 +31,16 @@ module.exports = StyleSheet.create({
     paddingLeft: 15,
     color: COLORS.black,
   },
+  textInputRoundedMultiLine: {
+    marginBottom: 10,
+    borderBottomWidth: 0,
+    fontSize: 15,
+    overflow: 'hidden',
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingLeft: 15,
+    color: COLORS.black,
+  },
   heading: {
     fontSize: hp('3%'),
     fontWeight: 'bold',
